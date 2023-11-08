@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Other apps…
     'rest_framework',
     'drf_yasg',
+    'rest_framework.authtoken',
     'django_filters',
     'phonenumber_field',
 
@@ -62,7 +63,7 @@ ROOT_URLCONF = 'auth.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,6 +77,28 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'auth.wsgi.application'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.OrderingFilter',
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+}
+
 
 
 # Database

@@ -47,7 +47,7 @@ class CustomUser(AbstractUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
-    photo = models.ImageField(upload_to='photos', null=True, blank=True)
+    photo = models.ImageField(upload_to='photos', null=True, blank=True, default='Default.png')
     phone_number = PhoneNumberField(unique=True, null=True, blank=True)
     additional_info = models.TextField(_('additional information'), blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -57,13 +57,13 @@ class UserProfile(models.Model):
         return f"{self.user.email}'s profile"
 
 
-@receiver(post_save, sender=CustomUser)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-    instance.profile.save()
-
-
-@receiver(models.signals.post_delete, sender=UserProfile)
-def delete_photo(sender, instance, **kwargs):
-    instance.photo.delete(save=False)
+# @receiver(post_save, sender=CustomUser)
+# def create_or_update_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         UserProfile.objects.create(user=instance)
+#     instance.profile.save()
+#
+#
+# @receiver(models.signals.post_delete, sender=UserProfile)
+# def delete_photo(sender, instance, **kwargs):
+#     instance.photo.delete(save=False)
