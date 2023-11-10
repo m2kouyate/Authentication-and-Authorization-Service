@@ -1,9 +1,10 @@
+import re
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.exceptions import ValidationError
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 class CustomUserManager(BaseUserManager):
@@ -13,6 +14,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        user.full_clean()
         user.save(using=self._db)
         return user
 
@@ -44,6 +46,13 @@ class CustomUser(AbstractUser):
     def is_property_owner_user(self):
         return self.is_property_owner
 
+    def clean(self):
+        super().clean()
+        if not re.match("^[a-zA-Z]*$", self.first_name):
+            raise ValidationError(_('First name must contain only letters.'))
+        if not re.match("^[a-zA-Z]*$", self.last_name):
+            raise ValidationError(_('Last name must contain only letters.'))
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
@@ -55,15 +64,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.email}'s profile"
-
-
-# @receiver(post_save, sender=CustomUser)
-# def create_or_update_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         UserProfile.objects.create(user=instance)
-#     instance.profile.save()
-#
-#
-# @receiver(models.signals.post_delete, sender=UserProfile)
-# def delete_photo(sender, instance, **kwargs):
-#     instance.photo.delete(save=False)

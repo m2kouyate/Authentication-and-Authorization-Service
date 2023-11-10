@@ -164,3 +164,12 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# SECURE_SSL_REDIRECT = True # перенаправление всех HTTP-запросов на HTTPS
+# SESSION_COOKIE_SECURE = True # куки сессии будут передаваться только через HTTPS
+# CSRF_COOKIE_SECURE = True # куки для защиты от CSRF-атак (Cross-Site Request Forgery) также передаются исключительно через HTTPS
+# SECURE_HSTS_SECONDS = 3600 # механизм, который заставляет браузеры общаться с сервером исключительно через HTTPS. HSTS будет активно в течение 1 часа
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True # распространяет правила HSTS на все поддомены вашего сайта.
+# SECURE_HSTS_PRELOAD = True # добавить сайт в список предзагрузки HSTS в браузерах, обеспечивая принудительное использование HTTPS с самого начала, даже перед первым визитом пользователя.
+# X_FRAME_OPTIONS = 'DENY' # предотвращает загрузку вашего сайта во фрейме (например, через <iframe>), что защищает от атак типа "clickjacking"

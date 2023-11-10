@@ -4,7 +4,7 @@ from .models import CustomUser, UserProfile
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_property_owner', 'is_admin', 'is_staff', 'is_active',)
+    list_display = ('id', 'email', 'first_name', 'last_name', 'is_property_owner', 'is_admin', 'is_staff', 'is_active',)
     list_filter = ('email', 'is_staff', 'is_active', 'is_property_owner', 'is_admin',)
     search_fields = ('email', 'is_property_owner', 'is_admin',)
     ordering = ('email',)
@@ -29,3 +29,7 @@ admin.site.register(CustomUser, CustomUserAdmin)
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     model = UserProfile
+    list_display = ('id', 'user', 'phone_number', 'photo')
+    list_filter = ('id', 'user', 'phone_number',)
+    search_fields = ('id', 'user', 'phone_number',)
+    ordering = ('user',)
